@@ -1,7 +1,9 @@
-export const Health = () => {
-  return (
-    <div>
-       <h3>Hey There!!! The App is Healthy</h3>
-    </div>
-  )
+// src/pages/screens/Health/Health.jsx
+export function Health() {
+  const health = {
+    status: "ok",
+    frontend: "alive"
+  };
+
+  return <pre>{JSON.stringify(health, null, 2)}</pre>;
 }
