@@ -19,6 +19,7 @@ import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import { Client } from "./pages/screens/Clients/Client";
+import { Health } from "./pages/screens/Health/Health";
 import { Peet } from "./pages/screens/Peets/Peet";
 import { Reserve } from "./pages/screens/Reserves/Reserve";
 
@@ -29,7 +30,10 @@ export default function App() {
         <ScrollToTop />
         <Routes>
           {/* Dashboard Layout */}
-          <Route element={<AppLayout />}>
+            <Route element={<AppLayout />}>
+
+            <Route index path="/health" element={ <Health/>} />
+
             <Route index path="/" element={<Home />} />
 
             {/* Client Page */}
