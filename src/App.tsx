@@ -29,10 +29,9 @@ export default function App() {
       <Router>
         <ScrollToTop />
         <Routes>
+        <Route index path="/health" element={ <Health/>} />
           {/* Dashboard Layout */}
             <Route element={<AppLayout />}>
-
-            <Route index path="/health" element={ <Health/>} />
 
             <Route index path="/" element={<Home />} />
 
