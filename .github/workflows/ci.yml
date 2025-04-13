@@ -6,7 +6,7 @@ name: CI Node
 on:
   # Triggers the workflow on push or pull request events but only for the "develop" branch
   push:
-    branches: [ "master" ]
+    branches: [ "master", "feature/*" ]
   pull_request:
     branches: [ "master" ]
 
@@ -59,16 +59,16 @@ jobs:
           push: true
           tags: trebor006/paw-paradise-front:latest
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      # - name: Install doctl
+      #   uses: digitalocean/action-doctl@v2
+      #   with:
+      #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DO Container Registry
-        run: doctl registry login --expiry-seconds 600
+      # - name: Log in to DO Container Registry
+      #   run: doctl registry login --expiry-seconds 600
 
-      - name: Tag image
-        run:
-          docker tag trebor006/paw-paradise-front:latest registry.digitalocean.com/paw-paradise/paw-paradise-front:1.0.0
-      - name: Push image to DO Container Registry
-        run: docker push registry.digitalocean.com/paw-paradise/paw-paradise-front:1.0.0
+      # - name: Tag image
+      #   run:
+      #     docker tag trebor006/paw-paradise-front:latest registry.digitalocean.com/paw-paradise/paw-paradise-front:1.0.0
+      # - name: Push image to DO Container Registry
+      #   run: docker push registry.digitalocean.com/paw-paradise/paw-paradise-front:1.0.0
