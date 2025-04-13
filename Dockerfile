@@ -26,10 +26,10 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copiar archivo de configuración opcional (si tienes uno)
-# COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Exponer el puerto por defecto de nginx
-EXPOSE 80
+EXPOSE 8080
 
 # Comando de inicio
 CMD ["nginx", "-g", "daemon off;"]
