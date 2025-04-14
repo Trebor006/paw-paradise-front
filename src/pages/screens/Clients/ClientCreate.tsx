@@ -118,7 +118,7 @@ export const ClientCreate = () => {
     try {
       // Validación del frontend
       if (validate()) {
-        const { data } = await saveClient(formClient);
+        await saveClient(formClient);
         toast.success("Cliente creado con éxito!", {
           position: "bottom-right",
           draggable: true,
