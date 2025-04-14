@@ -30,13 +30,13 @@ export const saveClient = async (clientData: ClientTypeForm) => {
       body: JSON.stringify(clientPayload),
     });
 
-    console.log("response: ",response);
+    // console.log("response: ",response);
     if (!response.ok) {
       throw new Error("Error al guardar el cliente");
     }
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     console.error("Error:", error);

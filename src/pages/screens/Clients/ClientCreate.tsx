@@ -10,8 +10,8 @@ import { countries } from "../../../services/Countries";
 import Button from "../../../components/ui/button/Button";
 import { saveClient } from "../../../services/ClientService";
 import { toast } from "react-toastify";
-import { ToastContainer } from "react-toastify";
 import { ClientTypeForm } from "../../../types/ClientType";
+import { useNavigate } from "react-router";
 
 const options = [
   { value: "M", label: "Masculino" },
@@ -19,6 +19,7 @@ const options = [
 ];
 
 export const ClientCreate = () => {
+  const navigate = useNavigate(); // Inicializar useNavigate
   const [loading, setLoading] = useState(false);
   const [formClient, setFormClient] = useState<ClientTypeForm>({
     ci: "",
@@ -31,8 +32,8 @@ export const ClientCreate = () => {
     country: "",
     address: "",
     image: null,
-    type: "Client",
-    role: "customer",
+    type: "C",
+    role: "Customer",
   });
   const [errors, setErrors] = useState({
     ci: "",
@@ -55,7 +56,7 @@ export const ClientCreate = () => {
     // Validación de ci (campo obligatorio)
     if (!formClient.ci.trim()) {
       newErrors.ci = "El CI es obligatorio";
-      console.log("CI invalid");
+      // console.log("CI invalid");
       isValid = false;
     } else {
       newErrors.ci = ""; // Limpiar el error si el campo no está vacío
@@ -63,7 +64,7 @@ export const ClientCreate = () => {
     // Validación de name (campo obligatorio)
     if (!formClient.name.trim()) {
       newErrors.name = "El nombre es obligatorio";
-      console.log("name invalid");
+      // console.log("name invalid");
       isValid = false;
     } else {
       newErrors.name = ""; // Limpiar el error si el campo no está vacío
@@ -71,7 +72,7 @@ export const ClientCreate = () => {
     // Validación de lastname (campo obligatorio)
     if (!formClient.lastname.trim()) {
       newErrors.lastname = "El apellido es obligatorio";
-      console.log("apellido invalid");
+      // console.log("apellido invalid");
       isValid = false;
     } else {
       newErrors.lastname = ""; // Limpiar el error si el campo no está vacío
@@ -79,7 +80,7 @@ export const ClientCreate = () => {
     // Validación de email (campo obligatorio)
     if (!formClient.email.trim()) {
       newErrors.email = "El email es obligatorio";
-      console.log("email invalid");
+      // console.log("email invalid");
       isValid = false;
     } else {
       newErrors.email = ""; // Limpiar el error si el campo no está vacío
@@ -89,36 +90,43 @@ export const ClientCreate = () => {
     return isValid; // Retorna si el formulario es válido o no
   };
 
+  const resetForm = () => {
+    setFormClient({
+      ci: "",
+      name: "",
+      lastname: "",
+      birthdate: null,
+      email: "",
+      phone: "",
+      gender: "",
+      country: "",
+      address: "",
+      image: null,
+      type: "C",
+      role: "Customer",
+    });
+    setErrors({
+      ci: "",
+      name: "",
+      lastname: "",
+      email: "",
+    });
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      //Validación del frontend
+      // Validación del frontend
       if (validate()) {
-        //prueba
-        // setTimeout(() => {
-        //   console.log(formClient);
-        //   toast.success("Cliente creado con éxito!", {
-        //     position: "bottom-right",
-        //     draggable: true,
-        //   });
-        //   setLoading(false); // <- aquí dentro del timeout
-        // }, 2000);
-        // No prueba
         const { data } = await saveClient(formClient);
         toast.success("Cliente creado con éxito!", {
           position: "bottom-right",
           draggable: true,
         });
-        setLoading(false);
-        // if (!response.success) {
-        //   console.log("!response.ok");
-        //   throw new Error("Error al crear el cliente.");
-        // }
-        // const data = await response.json();
-        console.log(data);
+        resetForm(); // Limpiar el formulario
+        navigate("/client"); // Navegar a la vista Client.tsx
       } else {
         console.log("Errores en el formulario");
-        setLoading(false);
       }
     } catch (error) {
       toast.error("Error al crear el cliente", {
@@ -278,7 +286,6 @@ export const ClientCreate = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };
