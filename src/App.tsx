@@ -22,6 +22,7 @@ import { Client } from "./pages/screens/Clients/Client";
 import { Health } from "./pages/screens/Health/Health";
 import { Peet } from "./pages/screens/Peets/Peet";
 import { Reserve } from "./pages/screens/Reserves/Reserve";
+import { ClientCreate } from "./pages/screens/Clients/ClientCreate";
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
 
             {/* Client Page */}
             <Route index path="/client" element={<Client />} />
+            <Route index path="/client/create" element={<ClientCreate />} />
             {/* Peet Page  */}
             <Route index path="/peet" element={<Peet />} />
             {/* Reserve Page */}
