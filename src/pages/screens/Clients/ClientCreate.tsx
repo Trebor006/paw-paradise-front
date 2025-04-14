@@ -6,35 +6,21 @@ import { DatePick } from "../../../components/form/form-elements/DatePick";
 import Input from "../../../components/form/input/InputField";
 import Label from "../../../components/form/Label";
 import Select from "../../../components/form/Select";
-import { EnvelopeIcon } from "../../../icons";
 import { countries } from "../../../services/Countries";
 import Button from "../../../components/ui/button/Button";
-// import { saveClient } from "../../../services/ClientService";
+import { saveClient } from "../../../services/ClientService";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
+import { ClientTypeForm } from "../../../types/ClientType";
 
 const options = [
   { value: "M", label: "Masculino" },
   { value: "F", label: "Femenino" },
 ];
 
-interface formClientProps {
-  ci: string;
-  name: string;
-  lastname: string;
-  birthdate: Date | null;
-  email: string;
-  phone: string;
-  gender: string;
-  country: string;
-  address: string;
-  image: File | null;
-  type: string;
-}
-
 export const ClientCreate = () => {
   const [loading, setLoading] = useState(false);
-  const [formClient, setFormClient] = useState<formClientProps>({
+  const [formClient, setFormClient] = useState<ClientTypeForm>({
     ci: "",
     name: "",
     lastname: "",
@@ -45,7 +31,14 @@ export const ClientCreate = () => {
     country: "",
     address: "",
     image: null,
-    type: "c",
+    type: "Client",
+    role: "customer",
+  });
+  const [errors, setErrors] = useState({
+    ci: "",
+    name: "",
+    lastname: "",
+    email: "",
   });
 
   const handleCountryChange = (value: string) => {
@@ -54,46 +47,86 @@ export const ClientCreate = () => {
   const handleGenderChange = (value: string) => {
     setFormClient({ ...formClient, gender: value });
   };
-  const validateForm = () => {
-    // Aquí puedes agregar la lógica de validación
-    // Verificar si todos los campos requeridos están llenos
-    const isValid = Object.values(formClient).every((field) => field !== "");
-    return isValid;
+
+  const validate = () => {
+    const newErrors = { ...errors }; // Copia del estado de errores
+    let isValid = true;
+
+    // Validación de ci (campo obligatorio)
+    if (!formClient.ci.trim()) {
+      newErrors.ci = "El CI es obligatorio";
+      console.log("CI invalid");
+      isValid = false;
+    } else {
+      newErrors.ci = ""; // Limpiar el error si el campo no está vacío
+    }
+    // Validación de name (campo obligatorio)
+    if (!formClient.name.trim()) {
+      newErrors.name = "El nombre es obligatorio";
+      console.log("name invalid");
+      isValid = false;
+    } else {
+      newErrors.name = ""; // Limpiar el error si el campo no está vacío
+    }
+    // Validación de lastname (campo obligatorio)
+    if (!formClient.lastname.trim()) {
+      newErrors.lastname = "El apellido es obligatorio";
+      console.log("apellido invalid");
+      isValid = false;
+    } else {
+      newErrors.lastname = ""; // Limpiar el error si el campo no está vacío
+    }
+    // Validación de email (campo obligatorio)
+    if (!formClient.email.trim()) {
+      newErrors.email = "El email es obligatorio";
+      console.log("email invalid");
+      isValid = false;
+    } else {
+      newErrors.email = ""; // Limpiar el error si el campo no está vacío
+    }
+
+    setErrors(newErrors); // Actualiza el estado de errores
+    return isValid; // Retorna si el formulario es válido o no
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      //Validación
-      if (!validateForm) {
-        toast.error("Por favor complete todos los campos", {
-          position: "bottom-right",
-          draggable: true,
-        });
-        return;
-      }
-      //prueba
-      setTimeout(() => {
-        console.log(formClient);
+      //Validación del frontend
+      if (validate()) {
+        //prueba
+        // setTimeout(() => {
+        //   console.log(formClient);
+        //   toast.success("Cliente creado con éxito!", {
+        //     position: "bottom-right",
+        //     draggable: true,
+        //   });
+        //   setLoading(false); // <- aquí dentro del timeout
+        // }, 2000);
+        // No prueba
+        const { data } = await saveClient(formClient);
         toast.success("Cliente creado con éxito!", {
           position: "bottom-right",
           draggable: true,
         });
-        setLoading(false); // <- aquí dentro del timeout
-      }, 2000);
-      // const response = await saveClient(formClient);
-      // if (!response.ok) {
-      //   throw new Error("Error al crear el cliente");
-      // }
-      // const data = await response.json();
-      // console.log(data);
+        setLoading(false);
+        // if (!response.success) {
+        //   console.log("!response.ok");
+        //   throw new Error("Error al crear el cliente.");
+        // }
+        // const data = await response.json();
+        console.log(data);
+      } else {
+        console.log("Errores en el formulario");
+        setLoading(false);
+      }
     } catch (error) {
       toast.error("Error al crear el cliente", {
         position: "bottom-right",
         draggable: true,
       });
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -122,6 +155,8 @@ export const ClientCreate = () => {
                   type="text"
                   id="input"
                   value={formClient.ci}
+                  error={errors.ci ? true : false}
+                  hint={errors.ci ? errors.ci : ""}
                   onChange={(e) =>
                     setFormClient({ ...formClient, ci: e.target.value })
                   }
@@ -136,6 +171,8 @@ export const ClientCreate = () => {
                   type="text"
                   id="input"
                   value={formClient.name}
+                  error={errors.name ? true : false}
+                  hint={errors.name ? errors.name : ""}
                   onChange={(e) =>
                     setFormClient({ ...formClient, name: e.target.value })
                   }
@@ -143,15 +180,34 @@ export const ClientCreate = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="input">Apellido</Label>
+                <Label htmlFor="input">
+                  Apellido<span className="text-red-600">*</span>
+                </Label>
                 <Input
                   type="text"
                   id="input"
                   value={formClient.lastname}
+                  error={errors.lastname ? true : false}
+                  hint={errors.lastname ? errors.lastname : ""}
                   onChange={(e) =>
                     setFormClient({ ...formClient, lastname: e.target.value })
                   }
                   placeholder="Introduzca su apellido paterno y materno"
+                />
+              </div>
+              <div>
+                <Label htmlFor="input">
+                  Correo<span className="text-red-600">*</span>
+                </Label>
+                <Input
+                  placeholder="info@gmail.com"
+                  type="text"
+                  value={formClient.email}
+                  error={errors.email ? true : false}
+                  hint={errors.email ? errors.email : ""}
+                  onChange={(e) =>
+                    setFormClient({ ...formClient, email: e.target.value })
+                  }
                 />
               </div>
               <div>
@@ -162,23 +218,6 @@ export const ClientCreate = () => {
                     setFormClient({ ...formClient, birthdate: date })
                   }
                 />
-              </div>
-              <div>
-                <Label htmlFor="input">Correo</Label>
-                <div className="relative">
-                  <Input
-                    placeholder="info@gmail.com"
-                    type="text"
-                    value={formClient.email}
-                    onChange={(e) =>
-                      setFormClient({ ...formClient, email: e.target.value })
-                    }
-                    className="pl-[62px]"
-                  />
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                    <EnvelopeIcon className="size-5" />
-                  </span>
-                </div>
               </div>
               <div>
                 <Label htmlFor="input">País</Label>
