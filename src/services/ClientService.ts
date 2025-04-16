@@ -43,3 +43,36 @@ export const saveClient = async (clientData: ClientTypeForm) => {
     throw error;
   }
 };
+
+export const getClientById = async (id: string): Promise<ClientTypeForm> => {
+  try {
+    const response = await fetch(`${baseUrl}/clientes/${id}`);
+    if (!response.ok) {
+      throw new Error("Error al obtener el cliente");
+    }
+    const data: ClientTypeForm = await response.json(); // Convertir la respuesta a JSON
+    return data; // Retornar el objeto tipado
+  } catch (error) {
+    console.error("Error al obtener el cliente:", error);
+    throw error;
+  }
+};
+
+// Actualizar cliente
+export const updateClient = async (
+  id: string,
+  clientData: ClientTypeForm
+): Promise<void> => {
+  try {
+    await fetch(`${baseUrl}/clientes/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(clientData),
+    });
+  } catch (error) {
+    console.error("Error al actualizar el cliente:", error);
+    throw error;
+  }
+};
