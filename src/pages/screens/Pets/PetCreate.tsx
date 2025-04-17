@@ -240,7 +240,7 @@ export const PetCreate = () => {
                   onChange={handleGenderChange}
                 />
               </div>
-              <div hidden>
+              <div >
                 <Label htmlFor="input">Imagen</Label>
                 <FileInput onChange={handleImageChange} className="custom-class" />
               </div>
