@@ -20,9 +20,10 @@ import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import { Client } from "./pages/screens/Clients/Client";
 import { Health } from "./pages/screens/Health/Health";
-import { Peet } from "./pages/screens/Peets/Peet";
 import { Reserve } from "./pages/screens/Reserves/Reserve";
 import { ClientCreate } from "./pages/screens/Clients/ClientCreate";
+import { PetCreate } from "./pages/screens/Pets/PetCreate";
+import { Pet } from "./pages/screens/Pets/Pet";
 import { ClientEdit } from "./pages/screens/Clients/ClientEdit";
 
 export default function App() {
@@ -40,9 +41,10 @@ export default function App() {
             {/* Client Page */}
             <Route index path="/client" element={<Client />} />
             <Route index path="/client/create" element={<ClientCreate />} />
+            <Route index path="/pet" element={<Pet/>} />
+            <Route index path="/pet/create" element={<PetCreate />} />
             <Route index path="/client/:ci/edit" element={<ClientEdit />} />
             {/* Peet Page  */}
-            <Route index path="/peet" element={<Peet />} />
             {/* Reserve Page */}
             <Route index path="/reserve" element={<Reserve />} />
             {/* Others Page */}

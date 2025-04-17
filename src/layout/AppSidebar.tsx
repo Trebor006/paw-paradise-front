@@ -46,8 +46,8 @@ const navItems: NavItem[] = [
     icon: <PeetIcon />,
     name: "Mascota",
     subItems: [
-      { name: "Mascotas", path: "/peet", pro: false },
-      { name: "Crear Mascota", path: "/peet/create", pro: false }
+      { name: "Mascotas", path: "/pet", pro: false },
+      { name: "Crear Mascota", path: "/pet/create", pro: false }
     ],
   },
   {
