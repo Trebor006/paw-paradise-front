@@ -24,6 +24,7 @@ import { Reserve } from "./pages/screens/Reserves/Reserve";
 import { ClientCreate } from "./pages/screens/Clients/ClientCreate";
 import { PetCreate } from "./pages/screens/Pets/PetCreate";
 import { Pet } from "./pages/screens/Pets/Pet";
+import { ClientEdit } from "./pages/screens/Clients/ClientEdit";
 
 export default function App() {
   return (
@@ -42,6 +43,8 @@ export default function App() {
             <Route index path="/client/create" element={<ClientCreate />} />
             <Route index path="/pet" element={<Pet/>} />
             <Route index path="/pet/create" element={<PetCreate />} />
+            <Route index path="/client/:ci/edit" element={<ClientEdit />} />
+            {/* Peet Page  */}
             {/* Reserve Page */}
             <Route index path="/reserve" element={<Reserve />} />
             {/* Others Page */}
