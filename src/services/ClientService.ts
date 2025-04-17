@@ -43,3 +43,29 @@ export const saveClient = async (clientData: ClientTypeForm) => {
     throw error;
   }
 };
+
+export const getClients = async () => {
+  try {
+    // Realizamos la petición GET para obtener todos los clientes
+    const response = await fetch(`${baseUrl}/clientes`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Si la respuesta no es exitosa, lanzamos un error
+    if (!response.ok) {
+      throw new Error("Error al obtener los clientes");
+    }
+
+    // Parseamos la respuesta en JSON
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error; // Re-lanzamos el error para ser manejado por el componente que lo llame
+  }
+};
+
+

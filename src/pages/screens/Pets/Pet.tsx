@@ -1,4 +1,4 @@
-export const Peet = () => {
+export const Pet = () => {
     return (
       <div>
          Lista de Mascota
