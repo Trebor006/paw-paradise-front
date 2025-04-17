@@ -6,12 +6,13 @@ import PageMeta from "../../../components/common/PageMeta";
 import { DatePick } from "../../../components/form/form-elements/DatePick";
 import Input from "../../../components/form/input/InputField";
 import Label from "../../../components/form/Label";
-import Select from "../../../components/form/Select";
+// import Select from "../../../components/form/Select";
 import { countries } from "../../../services/Countries";
 import Button from "../../../components/ui/button/Button";
-import { getClientById, updateClient } from "../../../services/ClientService";
+import { getClientByCi, updateClient } from "../../../services/ClientService";
 import { toast } from "react-toastify";
 import { ClientTypeForm } from "../../../types/ClientType";
+import SelectForm from "../../../components/form/SelectForm";
 
 const options = [
   { value: "M", label: "Masculino" },
@@ -19,7 +20,7 @@ const options = [
 ];
 
 export const ClientEdit = () => {
-  const { id } = useParams<{ id: string }>();
+  const { ci } = useParams<{ ci: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formClient, setFormClient] = useState<ClientTypeForm>({
@@ -46,20 +47,22 @@ export const ClientEdit = () => {
   useEffect(() => {
     const fetchClient = async () => {
       try {
-        const client = await getClientById(id!); // Obtener datos del cliente por ID
-        setFormClient(client);
+        const data = await getClientByCi(ci!); // Obtener datos del cliente por ID
+        console.log(data);
+        setFormClient(data);
       } catch (error) {
         toast.error("Error al cargar los datos del cliente", {
           position: "bottom-right",
           draggable: true,
         });
+        navigate("/client")
       }
     };
 
-    if (id) {
+    if (ci) {
       fetchClient();
     }
-  }, [id]);
+  }, [ci]);
 
   const handleCountryChange = (value: string) => {
     setFormClient({ ...formClient, country: value });
@@ -108,7 +111,7 @@ export const ClientEdit = () => {
     setLoading(true);
     try {
       if (validate()) {
-        await updateClient(id!, formClient); // Actualizar cliente
+        await updateClient(formClient.ci, formClient); // Actualizar cliente
         toast.success("Cliente actualizado con éxito!", {
           position: "bottom-right",
           draggable: true,
@@ -218,7 +221,7 @@ export const ClientEdit = () => {
               </div>
               <div>
                 <Label htmlFor="input">País</Label>
-                <Select
+                <SelectForm
                   options={countries}
                   placeholder="Seleccione una opción"
                   defaultValue={formClient.country}
@@ -240,7 +243,7 @@ export const ClientEdit = () => {
               </div>
               <div>
                 <Label htmlFor="input">Género</Label>
-                <Select
+                <SelectForm
                   options={options}
                   placeholder="Seleccione una opción"
                   defaultValue={formClient.gender}

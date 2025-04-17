@@ -44,13 +44,18 @@ export const saveClient = async (clientData: ClientTypeForm) => {
   }
 };
 
-export const getClientById = async (id: string): Promise<ClientTypeForm> => {
+export const getClientByCi = async (ci: string) => {
   try {
-    const response = await fetch(`${baseUrl}/clientes/${id}`);
+    const response = await fetch(`${baseUrl}/clientes/getBy/${ci}`);
+    console.log(response);
     if (!response.ok) {
+      console.log("error");
       throw new Error("Error al obtener el cliente");
     }
-    const data: ClientTypeForm = await response.json(); // Convertir la respuesta a JSON
+    console.log("response: ",response);
+    //return response;
+    const {data} = await response.json(); // Convertir la respuesta a JSON
+    // console.log("data: ", data.data);
     return data; // Retornar el objeto tipado
   } catch (error) {
     console.error("Error al obtener el cliente:", error);
@@ -60,11 +65,11 @@ export const getClientById = async (id: string): Promise<ClientTypeForm> => {
 
 // Actualizar cliente
 export const updateClient = async (
-  id: string,
+  ci: string,
   clientData: ClientTypeForm
 ): Promise<void> => {
   try {
-    await fetch(`${baseUrl}/clientes/${id}`, {
+    await fetch(`${baseUrl}/clientes/${ci}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

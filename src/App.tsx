@@ -40,7 +40,7 @@ export default function App() {
             {/* Client Page */}
             <Route index path="/client" element={<Client />} />
             <Route index path="/client/create" element={<ClientCreate />} />
-            <Route index path="/client/:id/edit" element={<ClientEdit />} />
+            <Route index path="/client/:ci/edit" element={<ClientEdit />} />
             {/* Peet Page  */}
             <Route index path="/peet" element={<Peet />} />
             {/* Reserve Page */}
