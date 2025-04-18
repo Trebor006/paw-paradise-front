@@ -28,8 +28,8 @@ interface Client {
   country: string;
 }
 const genderOptions = [
-  { value: "Male", label: "Masculino" },
-  { value: "Female", label: "Femenino" },
+  { value: "Male", label: "Macho" },
+  { value: "Female", label: "Hembra" },
 ];
 
 const typeOptions = [
@@ -233,14 +233,14 @@ export const PetCreate = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="input">Género</Label>
+                <Label htmlFor="input">Sexo</Label>
                 <Select
                   options={genderOptions}
                   placeholder="Seleccione una opción"
                   onChange={handleGenderChange}
                 />
               </div>
-              <div hidden>
+              <div >
                 <Label htmlFor="input">Imagen</Label>
                 <FileInput onChange={handleImageChange} className="custom-class" />
               </div>

@@ -18,13 +18,11 @@ export const savePet = async (petData: PetTypeForm) => {
     // Si hay una imagen, la convertimos a Base64
     if (petData.image) {
       base64Image = await toBase64(petData.image);
-      console.log("base64Image: ", base64Image);
     }
     // Creamos el payload con los datos de la mascota, incluyendo la imagen en base64
     const petPayload = {
       ...petData,
-      //image: base64Image, 
-      image: '', 
+      image: base64Image, 
     };
 
     // Realizamos la petición POST para guardar la mascota
