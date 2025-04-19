@@ -13,6 +13,7 @@ import { getClientByCi, updateClient } from "../../../services/ClientService";
 import { toast } from "react-toastify";
 import { ClientTypeForm } from "../../../types/ClientType";
 import SelectForm from "../../../components/form/SelectForm";
+import FileInput from "../../../components/form/input/FileInput";
 
 const options = [
   { value: "M", label: "Masculino" },
@@ -23,6 +24,7 @@ export const ClientEdit = () => {
   const { ci } = useParams<{ ci: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
   const [formClient, setFormClient] = useState<ClientTypeForm>({
     ci: "",
     name: "",
@@ -44,18 +46,29 @@ export const ClientEdit = () => {
     email: "",
   });
 
+  const handleFileChange = (file: File | null) => {
+    if (file) {
+      setFormClient({ ...formClient, image: file }); // guarda el archivo para el envío
+      setPreviewUrl(URL.createObjectURL(file)); // guarda la URL para mostrarla
+    }
+  };
+
   useEffect(() => {
     const fetchClient = async () => {
       try {
         const data = await getClientByCi(ci!); // Obtener datos del cliente por ID
         console.log(data);
         setFormClient(data);
+        // Si la imagen viene como base64 (string), seteamos la previsualización
+        if (data.image && typeof data.image === "string") {
+          setPreviewUrl(data.image);
+        }
       } catch (error) {
         toast.error("Error al cargar los datos del cliente", {
           position: "bottom-right",
           draggable: true,
         });
-        navigate("/client")
+        navigate("/client");
       }
     };
 
@@ -264,6 +277,30 @@ export const ClientEdit = () => {
                 />
               </div>
             </div>
+          </ComponentCardNormal>
+        </div>
+        <div className="space-y-6">
+          {/* Fotografía */}
+          <ComponentCardNormal>
+            {/* previsualizar imagen */}
+            <div className="w-full h-[300px] bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden rounded">
+              {formClient.image ? (
+                <img
+                  src={previewUrl}
+                  alt="Previsualización"
+                  className="object-contain h-full"
+                />
+              ) : (
+                <span className="text-gray-500">Sin imagen</span>
+              )}
+            </div>
+
+            {/* input imagen */}
+            <FileInput
+              onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+              className="custom-class"
+              accept="image/*"
+            />
           </ComponentCardNormal>
         </div>
         <div className="col-span-2">
