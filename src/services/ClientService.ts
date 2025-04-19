@@ -120,3 +120,21 @@ export const getClients = async () => {
     throw error; // Re-lanzamos el error para ser manejado por el componente que lo llame
   }
 };
+
+export const deleteClient = async (id: number): Promise<void> => {
+  try {
+    const response = await fetch(`${baseUrl}/clientes/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al eliminar el cliente");
+    }
+  } catch (error) {
+    console.error("Error al eliminar el cliente:", error);
+    throw error;
+  }
+};
