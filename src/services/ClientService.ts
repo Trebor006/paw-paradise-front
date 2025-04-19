@@ -44,7 +44,6 @@ export const saveClient = async (clientData: ClientTypeForm) => {
   }
 };
 
-
 export const getClientByCi = async (ci: string) => {
   try {
     const response = await fetch(`${baseUrl}/clientes/getBy/${ci}`);
@@ -70,19 +69,29 @@ export const updateClient = async (
   clientData: ClientTypeForm
 ): Promise<void> => {
   try {
+    let base64Image = null;
+
+    if (clientData.image) {
+      base64Image = await toBase64(clientData.image);
+    }
+
+    const clientPayload = {
+      ...clientData,
+      image: base64Image, // si no hay imagen será null
+    };
+
     await fetch(`${baseUrl}/clientes/${ci}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(clientData),
+      body: JSON.stringify(clientPayload),
     });
   } catch (error) {
     console.error("Error al actualizar el cliente:", error);
     throw error;
   }
 };
-
 
 export const getClients = async () => {
   try {
