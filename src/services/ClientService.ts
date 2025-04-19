@@ -71,8 +71,12 @@ export const updateClient = async (
   try {
     let base64Image = null;
 
-    if (clientData.image) {
+    if (clientData.image instanceof File) {
       base64Image = await toBase64(clientData.image);
+    } else if (typeof clientData.image === 'string') {
+      base64Image = clientData.image; // Ya está en base64
+    } else {
+      base64Image = null; // Si no hay imagen
     }
 
     const clientPayload = {
