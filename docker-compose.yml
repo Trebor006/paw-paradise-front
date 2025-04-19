@@ -1,0 +1,41 @@
+#version: '3.8'
+#
+#services:
+#  database:
+#    image: postgres:13
+#    environment:
+#      POSTGRES_USER: ${BD_USER}
+#      POSTGRES_PASSWORD: ${BD_PASSWORD}
+#      POSTGRES_DB: ${BD_NAME}
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      - app-network
+#
+#  backend:
+#    image: trebor006/paw-paradise-back:latest
+#    environment:
+#      BD_HOST: ${BD_HOST}
+#      BD_USER: ${BD_USER}
+#      BD_PASSWORD: ${BD_PASSWORD}
+#      BD_NAME: ${BD_NAME}
+#      BD_PORT: ${BD_PORT}
+#    ports:
+#      - "8081:8081"
+#    networks:
+#      - app-network
+#    depends_on:
+#      - database
+#
+#  front:
+#    image: trebor006/paw-paradise-front:latest
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - app-network
+#    depends_on:
+#      - backend
+#
+#networks:
+#  app-network:
+#    driver: bridge
