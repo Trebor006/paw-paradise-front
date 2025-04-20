@@ -12,6 +12,7 @@ import { saveClient } from "../../../services/ClientService";
 import { toast } from "react-toastify";
 import { ClientTypeForm } from "../../../types/ClientType";
 import { useNavigate } from "react-router";
+import FileInput from "../../../components/form/input/FileInput";
 
 const options = [
   { value: "M", label: "Masculino" },
@@ -21,6 +22,8 @@ const options = [
 export const ClientCreate = () => {
   const navigate = useNavigate(); // Inicializar useNavigate
   const [loading, setLoading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+
   const [formClient, setFormClient] = useState<ClientTypeForm>({
     ci: "",
     name: "",
@@ -41,6 +44,13 @@ export const ClientCreate = () => {
     lastname: "",
     email: "",
   });
+
+  const handleFileChange = (file: File | null) => {
+    if (file) {
+      setFormClient({ ...formClient, image: file }); // guarda el archivo para el envío
+      setPreviewUrl(URL.createObjectURL(file)); // guarda la URL para mostrarla
+    }
+  };
 
   const handleCountryChange = (value: string) => {
     setFormClient({ ...formClient, country: value });
@@ -272,7 +282,30 @@ export const ClientCreate = () => {
             </div>
           </ComponentCardNormal>
         </div>
-        <div className="space-y-6">{/* Fotografía */}</div>
+        <div className="space-y-6">
+          {/* Fotografía */}
+          <ComponentCardNormal>
+            {/* previsualizar imagen */}
+            <div className="w-full h-[300px] bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden rounded">
+              {formClient.image ? (
+                <img
+                  src={previewUrl}
+                  alt="Previsualización"
+                  className="object-contain h-full"
+                />
+              ) : (
+                <span className="text-gray-500">Sin imagen</span>
+              )}
+            </div>
+
+            {/* input imagen */}
+            <FileInput
+              onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+              className="custom-class"
+              accept="image/*"
+            />
+          </ComponentCardNormal>
+        </div>
         <div className="col-span-2">
           <div className="flex items-center justify-end space-x-4">
             <Button
