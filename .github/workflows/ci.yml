@@ -6,7 +6,7 @@ name: CI Node
 on:
   # Triggers the workflow on push or pull request events but only for the "develop" branch
   push:
-    branches: [ "master" ]
+    branches: [ "master" , "hotfix/*" ]
   pull_request:
     branches: [ "master" ]
 
